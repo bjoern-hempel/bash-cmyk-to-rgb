@@ -83,25 +83,25 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -x
 ### Specify a working directory
 
 ```bash
-$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i -x
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i -x
 ```
 
 ### Use image filter
 
 ```bash
-$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -x
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -x
 ```
 
 ### Force image creation
 
 ```bash
-$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x
 ```
 
 ### Replace origin image
 
 ```bash
-$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x -r
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x -r
 ```
 
 
