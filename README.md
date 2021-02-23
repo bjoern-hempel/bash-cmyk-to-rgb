@@ -79,6 +79,12 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -x
 ...
 ```
 
+### Force image creation
+
+```bash
+$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x
+```
+
 
 
 ## A. Authors
