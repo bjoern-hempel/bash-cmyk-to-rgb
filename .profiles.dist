@@ -1,0 +1,4 @@
+# define the profiles
+SETTING_PROFILE_CMYK="profiles/adobeIccProfiles/CMYK/USWebCoatedSWOP.icc"
+SETTING_PROFILE_RGB="profiles/adobeIccProfiles/RGB/AppleRGB.icc"
+
