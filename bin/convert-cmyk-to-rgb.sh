@@ -12,40 +12,57 @@ ENV_EMAIL='bjoern@hempel.li'
 SETTING_DRYRUN=true
 SETTING_VERBOSE=false
 SETTING_REPLACE=true
-SETTING_PROFILE_FILE="$ENV_CURRENT_PATH/.profiles"
 SETTING_PROFILE_RGB=""
 SETTING_PROFILE_CMYK=""
+SETTING_FILTER="jpg|gif|png|jpeg|tif"
+SETTING_WORKING_DIRECTORY="$ENV_CURRENT_PATH"
+SETTING_NEEDED_APPLICATIONS=( convert grep sed cat )
 
 # ----------
-# function: show help
+# Show help
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 showHelp() {
     cat "$BASH_SOURCE" | grep --color=never "# help:" | grep -v 'cat parameter' | sed 's/[ ]*# help:[ ]*//g' | sed "s~%scriptname%~$ENV_SCRIPTNAME~g"
 }
 
 # ----------
-# function: show version
+# Show version
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 showVersion() {
     echo "$ENV_SCRIPTNAME $ENV_VERSION - $ENV_AUTHOR <$ENV_EMAIL>"
 }
 
 # ----------
-# function: Function to find all image files within the current folder.
+# Function to find all image files within the current folder.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 getImageFiles() {
-    find . -regex ".*\.\(jpg\|gif\|png\|jpeg\)"
+    find . -regex ".*\.\(${SETTING_FILTER//|/\\|}\)"
 }
 
 # ----------
-# function: Function to get the colorspace of the given image.
+# Function to get the colorspace of the given image.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 getImageColorspace() {
-    identify -format "%[colorspace]" "$1"
+    identify -format "%[colorspace]" "$1" 2>/dev/null
 }
 
 # ----------
-# function: Function to get the file size of given image.
+# Function to get the file size of given image.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 getImageFileSize() {
     #stat -c%s "$1"
@@ -53,7 +70,10 @@ getImageFileSize() {
 }
 
 # ----------
-# function: Checks if the given colorspace has to be converted.
+# Checks if the given colorspace has to be converted.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 getToBeConverted() {
     case "$1" in
@@ -63,7 +83,10 @@ getToBeConverted() {
 }
 
 # ----------
-# function: Gets the type name of given path.
+# Gets the type name of given path.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 getTypeName() {
     local path=$(dirname "$1")
@@ -75,7 +98,10 @@ getTypeName() {
 }
 
 # ----------
-# function: Function to print some image file informations.
+# Function to print some image file informations.
+#
+# @author  Björn Hempel
+# @version 1.0
 # ----------
 printFileInformations() {
     local imageColorspace=$(getImageColorspace "$1")
@@ -85,13 +111,42 @@ printFileInformations() {
     echo "→ Size:             $imageFileSize"
 }
 
+# ------------
+# Check if a given application exists
+#
+# @author  Björn Hempel
+# @version 1.0
+# ------------
+applicationExists() {
+  `which $1 >/dev/null`
+}
+
 # read arguments
 # help:
 # help: Usage: %scriptname% [options...]
 while [[ $# > 0 ]]; do
     case "$1" in
         # help:
-        # help:  -f,    --force                       Force to convert the image.
+        # help:  -f,    --filter                      Change the image filter (default: jpg|gif|png|jpeg|tif)
+        -f=*|--filter=*)
+            SETTING_FILTER="${1#*=}"
+            ;;
+        -f|--filter)
+            shift
+            SETTING_FILTER="$1"
+            ;;
+
+        # help:  -w,    --working-directory           Change the working directory (default: current directory)
+        -w=*|--working-directory=*)
+            SETTING_WORKING_DIRECTORY="${1#*=}"
+            ;;
+        -w|--working-directory)
+            shift
+            SETTING_WORKING_DIRECTORY="$1"
+            ;;
+
+        # help:
+        # help:  -d,    --no-dry-run                  Force to convert the image (no dry run).
         -f|--force)
             SETTING_DRYRUN=false
             ;;
@@ -122,9 +177,22 @@ while [[ $# > 0 ]]; do
     shift
 done
 
+# check installed applications
+for application in "${SETTING_NEEDED_APPLICATIONS[@]}"; do
+    if ! applicationExists $application; then
+        echo "The application \"$application\" does not exists. Please install this application before. Abort." && showHelp && exit
+    fi
+done
+
+# check working directory
+if [ ! -d "$SETTING_WORKING_DIRECTORY" ]; then
+    echo "The given working directory does not exists. Abort." && showHelp && exit
+fi
+
 # check profiles
+SETTING_PROFILE_FILE="$SETTING_WORKING_DIRECTORY/.profiles"
 if [ ! -f "$SETTING_PROFILE_FILE" ]; then
-    echo "The .profile file was not found. Abort." && echo && exit
+    echo "The .profile file was not found. Abort." && showHelp && exit
 fi
 
 # load profiles
@@ -132,11 +200,14 @@ source "$SETTING_PROFILE_FILE"
 
 # check profiles
 if [ "$SETTING_PROFILE_RGB" == "" ] || [ ! -f "$SETTING_PROFILE_RGB" ]; then
-    echo "The rgb profile was not found or not given. Check your .profile file. Abort." && echo && exit
+    echo "The rgb profile was not found or not given. Check your .profile file. Abort." && showHelp && exit
 fi
 if [ "$SETTING_PROFILE_CMYK" == "" ] || [ ! -f "$SETTING_PROFILE_CMYK" ]; then
-    echo "The cmyk profile was not found or not given. Check your .profile file. Abort." && echo && exit
+    echo "The cmyk profile was not found or not given. Check your .profile file. Abort." && showHelp && exit
 fi
+
+# change working directory
+cd $SETTING_WORKING_DIRECTORY
 
 # collect image files
 imageFiles=$(getImageFiles)
@@ -153,17 +224,18 @@ for imageFile in $imageFiles; do
     imageColorspace=$(getImageColorspace "$imageFile")
     imageFileSize=$(getImageFileSize "$imageFile")
 
-    # print some informations
-    printFileInformations "$imageFile"
-
     # checks if the image has to be converted
     if ! getToBeConverted "$imageColorspace"; then
-        echo -e "→ STATUS:           \e[42mfine\e[0m"
-	echo && echo
+        if $SETTING_VERBOSE; then
+            printFileInformations "$imageFile"
+            echo -e "→ STATUS:           \e[42mfine\e[0m"
+	    echo && echo
+        fi
         continue
     fi
 
     # image has to be converted
+    printFileInformations "$imageFile"
     echo -e "→ STATUS:           \e[41mto be converted\e[0m"
 
     # check dryrun
