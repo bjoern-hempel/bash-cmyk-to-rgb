@@ -113,7 +113,7 @@ while [[ $# > 0 ]]; do
             showVersion && exit 0
             ;;
 
-                # help:
+        # help:
         # collect all unknown parameters
         *)
             PARAMETERS+=("$1")
