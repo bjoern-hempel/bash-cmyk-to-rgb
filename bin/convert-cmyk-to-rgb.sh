@@ -11,7 +11,7 @@ ENV_EMAIL='bjoern@hempel.li'
 # some settings
 SETTING_DRYRUN=true
 SETTING_VERBOSE=false
-SETTING_REPLACE=true
+SETTING_REPLACE=false
 SETTING_PROFILE_RGB=""
 SETTING_PROFILE_CMYK=""
 SETTING_FILTER="jpg|gif|png|jpeg|tif"
@@ -127,11 +127,11 @@ applicationExists() {
 while [[ $# > 0 ]]; do
     case "$1" in
         # help:
-        # help:  -f,    --filter                      Change the image filter (default: jpg|gif|png|jpeg|tif)
-        -f=*|--filter=*)
+        # help:  -i,    --image-filter                Change the image filter (default: jpg|gif|png|jpeg|tif)
+        -i=*|--image-filter=*)
             SETTING_FILTER="${1#*=}"
             ;;
-        -f|--filter)
+        -i|--image-filter)
             shift
             SETTING_FILTER="$1"
             ;;
@@ -145,8 +145,13 @@ while [[ $# > 0 ]]; do
             SETTING_WORKING_DIRECTORY="$1"
             ;;
 
+        # help:  -r,    --replace                     Replace the image instead of copying it.
+        -r|--replace)
+            SETTING_REPLACE=true
+            ;;
+
         # help:
-        # help:  -d,    --no-dry-run                  Force to convert the image (no dry run).
+        # help:  -f,    --force                       Force to convert the image (no dry run).
         -f|--force)
             SETTING_DRYRUN=false
             ;;
