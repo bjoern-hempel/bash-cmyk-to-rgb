@@ -42,10 +42,11 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -h
 
 Usage: convert-cmyk-to-rgb.sh [options...]
 
--f,    --filter                      Change the image filter (default: jpg|gif|png|jpeg|tif)
+-i,    --image-filter                Change the image filter (default: jpg|gif|png|jpeg|tif)
 -w,    --working-directory           Change the working directory (default: current directory)
+-r,    --replace                     Replace the image instead of copying it.
 
--d,    --no-dry-run                  Force to convert the image (no dry run).
+-f,    --force                       Force to convert the image (no dry run).
 
 -x,    --verbose                     Set output to verbose.
 
