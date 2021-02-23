@@ -56,7 +56,7 @@ Usage: convert-cmyk-to-rgb.sh [options...]
 ### Dry run
 
 ```bash
-$ [working-directory]/bin/convert-cmyk-to-rgb.sh
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -x
 
 → Filename:         ./user_upload/folder1/file1.jpg
 → Colorspace:       sRGB
