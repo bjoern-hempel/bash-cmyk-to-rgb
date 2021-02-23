@@ -85,6 +85,12 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -x
 $ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x
 ```
 
+### Replace origin image
+
+```bash
+$ bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x -r
+```
+
 
 
 ## A. Authors
