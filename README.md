@@ -86,7 +86,7 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -x
 $ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i -x
 ```
 
-### Use image filter
+### Use an image filter
 
 ```bash
 $ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -x
@@ -103,6 +103,13 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|
 ```bash
 $ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x -r
 ```
+
+## Todos
+
+* Specification of the profiles also as parameters
+* Loop through some ImageMagick parameters (quality, etc.)
+* Output log file for all changes
+* Etc.
 
 
 
