@@ -89,19 +89,19 @@ $ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i -x
 ### Use an image filter
 
 ```bash
-$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -x
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|jpeg|tif|tiff" -x
 ```
 
 ### Force image creation
 
 ```bash
-$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|jpeg|tif|tiff" -f -x
 ```
 
 ### Replace origin image
 
 ```bash
-$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|gif|png|jpeg" -f -x -r
+$ [working-directory]/bin/convert-cmyk-to-rgb.sh -w /path/to/images -i "jpg|jpeg|tif|tiff" -f -x -r
 ```
 
 ## Todos
